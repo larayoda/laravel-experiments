@@ -1,0 +1,12 @@
+#!/bin/bash
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE USER pm_user;
+    ALTER USER pm_user WITH PASSWORD '123456';
+    CREATE DATABASE pm_db;
+    GRANT ALL PRIVILEGES ON DATABASE pm_db TO pm_user;
+    GRANT CREATE ON SCHEMA public TO pm_user;
+    GRANT USAGE ON SCHEMA public TO pm_user;
+    GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO pm_user;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO pm_user;
+EOSQL
